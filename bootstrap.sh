@@ -2,12 +2,31 @@
 
 set -euo pipefail
 
-cd $(dirname $BASH_SOURCE)
+cd "$(dirname "${BASH_SOURCE[0]}")"
 WORKDIR=$(pwd)
 
+backup() {
+  [ -L "$HOME/$1.bak" ] && rm "$HOME/$1.bak"
+  [ -L "$HOME/$1" ] && mv "$HOME/$1"{,.bak}
+  [ -f "$HOME/$1" ] && mv "$HOME/$1"{,.bak}
+  [ -d "$HOME/$1" ] && mv "$HOME/$1"{,.bak}
+  true
+}
+
+assert_line() {
+  grep -q "$1" "$HOME/$2" || append_line "$1" "$2"
+}
+
+append_line() {
+  backup "$2"
+  echo "adding line '$1' to $2"
+  echo >>"$HOME/$2"
+  echo "$1" >>"$HOME/$2"
+}
+
 symlink() {
+  backup "$2"
   echo "symlinking $1 <- $2"
-  [ -f "$2" ] && cp "$2{,.bak}"
   ln -sf "$WORKDIR/$1" "$HOME/$2"
 }
 
@@ -15,6 +34,10 @@ git_clone() {
   echo "git cloning $1 into $2"
   git clone "$1" "$HOME/$2"
 }
+
+if [ -f "$HOME/.zshrc" ]; then
+  assert_line "source $WORKDIR/zsh/zshrc.sh" ".zshrc"
+fi
 
 if [ -d "$HOME/.config/alacritty" ]; then
   symlink "alacritty/alacritty.toml" ".config/alacritty/alacritty.toml"
@@ -33,15 +56,9 @@ else
 fi
 
 if [ -d "$HOME/.config/nvim" ]; then
-  # required
-  mv ~/.config/nvim{,.bak}
-
-  # optional but recommended
-  # mv ~/.local/share/nvim{,.bak}
-  # mv ~/.local/state/nvim{,.bak}
-  # mv ~/.cache/nvim{,.bak}
-
   symlink "nvim" ".config/nvim"
+
+  echo "You might want to delete ~/.local/share/nvim, ~/.local/state/nvim, and ~/.cache/nvim"
 else
   echo "Go to https://neovim.io/doc/install/ to install neovim"
 fi
