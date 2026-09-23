@@ -1,0 +1,17 @@
+[general]
+import = [
+  "~/.config/alacritty/themes/themes/tokyo_night_storm.toml"
+]
+
+[window]
+startup_mode = "SimpleFullscreen"
+padding = { x = 9, y = 9 }
+
+[terminal]
+shell = "/usr/local/bin/zellij"
+
+[font]
+normal = { family = "Hack Nerd Font Mono", style = "Regular" }
+italic = { family = "Hack Nerd Font Mono", style = "Italic" }
+bold = { family = "Hack Nerd Font Mono", style = "Bold" }
+size = 16
