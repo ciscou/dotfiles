@@ -5,12 +5,20 @@ set -euo pipefail
 cd $(dirname $BASH_SOURCE)
 WORKDIR=$(pwd)
 
-if [ -d ~/.config/alacritty ]; then
-  [ -f ~/.config/alacritty/alacritty.toml ] && cp ~/.config/alacritty/alacritty.toml{,.bak}
-  ln -sf $WORKDIR/alacritty/alacritty.toml ~/.config/alacritty/alacritty.toml
+symlink() {
+  echo "symlinking $1 <- $2"
+  [ -f "$2" ] && cp "$2{,.bak}"
+  ln -sf "$WORKDIR/$1" "$HOME/$2"
+}
+
+if [ -d "$HOME/.config/alacritty" ]; then
+  symlink "alacritty/alacritty.toml" ".config/alacritty/alacritty.toml"
+else
+  echo "Go to https://alacritty.org/#Installation to install alacritty"
 fi
 
-if [ -d ~/.config/zellij ]; then
-  [ -f ~/.config/zellij/config.kdl ] && cp ~/.config/zellij/config.kdl{,.bak}
-  ln -sf $WORKDIR/zellij/config.kdl ~/.config/zellij/config.kdl
+if [ -d "$HOME/.config/zellij" ]; then
+  symlink "zellij/config.kdl" ".config/zellij/config.kdl"
+else
+  echo "Go to https://zellij.dev/documentation/installation.html#binary-download to install zellij"
 fi
