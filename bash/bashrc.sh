@@ -1,3 +1,5 @@
+eval "$(/home/francis/.local/bin/mise activate bash)"
+
 alias n=nvim
 alias cp="cp -i"
 alias mv="mv -i"
