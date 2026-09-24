@@ -5,10 +5,11 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 WORKDIR=$(pwd)
 
-IS_UBUNTU=false
-IS_OSX=false
-[ -f /etc/issue ] && grep -q Ubuntu /etc/issue && IS_UBUNTU=true
-uname | grep -q "Darwin" && IS_OSX=true
+IS_DEBIAN=
+IS_OSX=
+[ -f /etc/issue ] && grep -q Debian /etc/issue && IS_DEBIAN=1
+[ -f /etc/issue ] && grep -q Ubuntu /etc/issue && IS_DEBIAN=1
+uname | grep -q "Darwin" && IS_OSX=1
 
 install_homebrew() {
   echo "  Installing hombebrew"
@@ -45,16 +46,16 @@ git_clone() {
   git clone "$1" "$2"
 }
 
-if [ "$IS_OSX" = "true" ]; then
+if [ "$IS_OSX" ]; then
   which -s brew || install_homebrew
 
   brew update
   brew upgrade
 
-  brew install git
+  which -s git || brew install git
 fi
 
-if [ "$IS_UBUNTU" = "true" ]; then
+if [ "$IS_DEBIAN" ]; then
   sudo apt-get update
   sudo apt-get upgrade
 
@@ -91,10 +92,17 @@ if [ -d "$HOME/.config/alacritty" ]; then
   fi
 
   echo "  Make sure you have Hack Nerd Font installed:"
-  echo "    brew install --cask font-hack-nerd-font"
-  echo "    or download and install manually from https://www.nerdfonts.com/font-downloads"
+  if [ "$IS_OSX" ]; then
+    echo "    brew install --cask font-hack-nerd-font"
+    echo "      - or -"
+  fi
+  echo "    download and install manually from https://www.nerdfonts.com/font-downloads"
 else
   echo "Make sure you have alacritty installed:"
+  if [ "$IS_DEBIAN" ]; then
+    echo "  sudo apt-get install alacritty"
+    echo "    - or -"
+  fi
   echo "  download and install manually from https://alacritty.org/#Installation"
 fi
 
@@ -106,8 +114,11 @@ if [ -d "$HOME/.config/zellij" ]; then
   symlink "$WORKDIR/zellij/config.kdl" "$HOME/.config/zellij/config.kdl"
 else
   echo "Make sure you have zellij installed:"
-  echo "  brew install zellij"
-  echo "  or download and install manually from https://zellij.dev/documentation/installation.html"
+  if [ "$IS_OSX" ]; then
+    echo "  brew install zellij"
+    echo "    - or -"
+  fi
+  echo "  download and install manually from https://zellij.dev/documentation/installation.html"
 fi
 
 echo
@@ -123,6 +134,13 @@ if [ -d "$HOME/.config/nvim" ]; then
   echo "    mv ~/.cache/nvim{,.bak}"
 else
   echo "Make sure you have neovim installed:"
-  echo "  brew install neovim"
-  echo "  or download and install manually from https://neovim.io/doc/install/ to install neovim"
+  if [ "$IS_OSX" ]; then
+    echo "  brew install neovim"
+    echo "    - or -"
+  fi
+  if [ "$IS_DEBIAN" ]; then
+    echo "  sudo apt-get install neovim"
+    echo "    - or -"
+  fi
+  echo "  download and install manually from https://neovim.io/doc/install/ to install neovim"
 fi
