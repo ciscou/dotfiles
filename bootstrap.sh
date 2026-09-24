@@ -50,6 +50,7 @@ if [ "$IS_OSX" ]; then
   which -s brew || install_homebrew
 
   echo "Updating your system..."
+  echo
 
   brew update
   brew upgrade
@@ -59,6 +60,7 @@ fi
 
 if [ "$IS_DEBIAN" ]; then
   echo "Updating your system..."
+  echo
 
   sudo apt-get update
   sudo apt-get upgrade
@@ -98,14 +100,14 @@ if [ -d "$HOME/.config/alacritty" ]; then
   echo "  Make sure you have Hack Nerd Font installed:"
   if [ "$IS_OSX" ]; then
     echo "    brew install --cask font-hack-nerd-font"
-    echo "      - or -"
+    echo "    - or -"
   fi
   echo "    download and install manually from https://www.nerdfonts.com/font-downloads"
 else
   echo "Make sure you have alacritty installed:"
   if [ "$IS_DEBIAN" ]; then
     echo "  sudo apt-get install alacritty"
-    echo "    - or -"
+    echo "  - or -"
   fi
   echo "  download and install manually from https://alacritty.org/#Installation"
 fi
@@ -120,7 +122,7 @@ else
   echo "Make sure you have zellij installed:"
   if [ "$IS_OSX" ]; then
     echo "  brew install zellij"
-    echo "    - or -"
+    echo "  - or -"
   fi
   echo "  download and install manually from https://zellij.dev/documentation/installation.html"
 fi
@@ -140,11 +142,11 @@ else
   echo "Make sure you have neovim installed:"
   if [ "$IS_OSX" ]; then
     echo "  brew install neovim"
-    echo "    - or -"
+    echo "  - or -"
   fi
   if [ "$IS_DEBIAN" ]; then
     echo "  sudo apt-get install neovim"
-    echo "    - or -"
+    echo "  - or -"
   fi
   echo "  download and install manually from https://neovim.io/doc/install/ to install neovim"
 fi
