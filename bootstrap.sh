@@ -43,6 +43,14 @@ else
   echo "Skipping zsh"
 fi
 
+if [ -f "$HOME/.bashrc" ]; then
+  echo "Configuring bash..."
+
+  assert_line "source $WORKDIR/bash/bashrc.sh" "$HOME/.bashrc"
+else
+  echo "Skipping bash"
+fi
+
 echo
 
 if [ -d "$HOME/.config/alacritty" ]; then
