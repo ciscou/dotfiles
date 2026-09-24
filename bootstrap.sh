@@ -58,7 +58,7 @@ if [ -d "$HOME/.config/alacritty" ]; then
   echo "    brew install --cask font-hack-nerd-font"
   echo "    or download and install manually from https://www.nerdfonts.com/font-downloads"
 else
-  echo "  Go to https://alacritty.org/#Installation to install alacritty"
+  echo "Go to https://alacritty.org/#Installation to install alacritty"
 fi
 
 echo
@@ -68,9 +68,9 @@ if [ -d "$HOME/.config/zellij" ]; then
 
   symlink "$WORKDIR/zellij/config.kdl" "$HOME/.config/zellij/config.kdl"
 else
-  echo "  Make sure you have zellij installed:"
-  echo "    brew install zellij"
-  echo "    or download and install manually from https://zellij.dev/documentation/installation.html"
+  echo "Make sure you have zellij installed:"
+  echo "  brew install zellij"
+  echo "  or download and install manually from https://zellij.dev/documentation/installation.html"
 fi
 
 echo
@@ -85,7 +85,7 @@ if [ -d "$HOME/.config/nvim" ]; then
   echo "    mv ~/.local/state/nvim{,.bak}"
   echo "    mv ~/.cache/nvim{,.bak}"
 else
-  echo "  Make sure you have neovim installed:"
-  echo "    brew install neovim"
-  echo "    or download and install manually from https://neovim.io/doc/install/ to install neovim"
+  echo "Make sure you have neovim installed:"
+  echo "  brew install neovim"
+  echo "  or download and install manually from https://neovim.io/doc/install/ to install neovim"
 fi
