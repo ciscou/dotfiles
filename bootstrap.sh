@@ -12,7 +12,7 @@ IS_OSX=
 uname | grep -q "Darwin" && IS_OSX=1
 
 install_homebrew() {
-  echo "  Installing hombebrew"
+  echo "Installing hombebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 
@@ -49,6 +49,8 @@ git_clone() {
 if [ "$IS_OSX" ]; then
   which -s brew || install_homebrew
 
+  echo "Updating your system..."
+
   brew update
   brew upgrade
 
@@ -56,6 +58,8 @@ if [ "$IS_OSX" ]; then
 fi
 
 if [ "$IS_DEBIAN" ]; then
+  echo "Updating your system..."
+
   sudo apt-get update
   sudo apt-get upgrade
 
