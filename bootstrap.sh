@@ -16,6 +16,11 @@ install_homebrew() {
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 
+install_mise() {
+  echo "Installing mise..."
+  curl -fsSL https://mise.run | sh
+}
+
 backup() {
   [ -L "$1.bak" ] && rm "$1.bak"
   [ -L "$1" ] && mv "$1"{,.bak}
@@ -93,6 +98,13 @@ if [ -f "$HOME/.bashrc" ]; then
 else
   echo "Skipping bash"
 fi
+
+echo
+
+echo "Configuring mise..."
+which -s mise || install_mise
+mkdir -p ~/.config/mise
+symlink "$WORKDIR/mise/config.toml" "$HOME/.config/mise/config.toml"
 
 echo
 
