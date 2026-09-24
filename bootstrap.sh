@@ -55,7 +55,9 @@ if [ "$IS_OSX" ]; then
   brew update
   brew upgrade
 
-  which -s git || brew install git
+  for package in git thefuck; do
+    which -s $package || brew install $package
+  done
 fi
 
 if [ "$IS_DEBIAN" ]; then
@@ -65,7 +67,9 @@ if [ "$IS_DEBIAN" ]; then
   sudo apt-get update
   sudo apt-get upgrade
 
-  which -s git || sudo apt-get install git
+  for package in git thefuck; do
+    which -s $package || sudo apt-get install $package
+  done
 fi
 
 if [ -f "$HOME/.zshrc" ]; then
