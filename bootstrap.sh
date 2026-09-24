@@ -58,7 +58,8 @@ if [ -d "$HOME/.config/alacritty" ]; then
   echo "    brew install --cask font-hack-nerd-font"
   echo "    or download and install manually from https://www.nerdfonts.com/font-downloads"
 else
-  echo "Go to https://alacritty.org/#Installation to install alacritty"
+  echo "Make sure you have alacritty installed:"
+  echo "  download and install manually from https://alacritty.org/#Installation"
 fi
 
 echo
