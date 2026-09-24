@@ -43,6 +43,8 @@ else
   echo "Skipping zsh"
 fi
 
+echo
+
 if [ -f "$HOME/.bashrc" ]; then
   echo "Configuring bash..."
 
