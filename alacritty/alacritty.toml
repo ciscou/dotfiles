@@ -15,3 +15,9 @@ normal = { family = "Hack Nerd Font Mono", style = "Regular" }
 italic = { family = "Hack Nerd Font Mono", style = "Italic" }
 bold = { family = "Hack Nerd Font Mono", style = "Bold" }
 size = 16
+
+[keyboard]
+bindings = [
+  { key = "Right", mods = "Command", chars = "\u001BF" },
+  { key = "Left",  mods = "Command", chars = "\u001BB" },
+]
