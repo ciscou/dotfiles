@@ -8,8 +8,8 @@ WORKDIR=$(pwd)
 backup() {
   [ -L "$1.bak" ] && rm "$1.bak"
   [ -L "$1" ] && mv "$1"{,.bak}
-  [ -f "$1" ] && mv "$1"{,.bak}
   [ -d "$1" ] && mv "$1"{,.bak}
+  [ -f "$1" ] && cp "$1"{,.bak}
   true
 }
 
