@@ -1,3 +1,5 @@
+eval "$(/Users/francis/.local/bin/mise activate zsh)"
+
 alias n=nvim
 alias cp="cp -i"
 alias mv="mv -i"
