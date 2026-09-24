@@ -5,6 +5,8 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 WORKDIR=$(pwd)
 
+IS_UBUNTU=false
+IS_OSX=false
 [ -f /etc/issue ] && grep -q Ubuntu /etc/issue && IS_UBUNTU=true
 uname | grep -q "Darwin" && IS_OSX=true
 
