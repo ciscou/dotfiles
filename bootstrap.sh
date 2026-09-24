@@ -19,46 +19,73 @@ assert_line() {
 
 append_line() {
   backup "$2"
-  echo "adding line '$1' to $2"
+  echo "  Appending line '$1' to $2"
   echo >>"$2"
   echo "$1" >>"$2"
 }
 
 symlink() {
   backup "$2"
-  echo "symlinking $1 <- $2"
-  ln -sf "$WORKDIR/$1" "$2"
+  echo "  Symlinking $2 -> $1"
+  ln -sf "$1" "$2"
 }
 
 git_clone() {
-  echo "git cloning $1 into $2"
+  echo "  Git cloning $1 into $2"
   git clone "$1" "$2"
 }
 
 if [ -f "$HOME/.zshrc" ]; then
+  echo "Configuring zsh..."
+
   assert_line "source $WORKDIR/zsh/zshrc.sh" "$HOME/.zshrc"
+else
+  echo "Skipping zsh"
 fi
 
+echo
+
 if [ -d "$HOME/.config/alacritty" ]; then
-  symlink "alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
+  echo "Configuring alacritty..."
+
+  symlink "$WORKDIR/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
 
   if [ ! -d "$HOME/.config/alacritty/themes" ]; then
     git_clone "https://github.com/alacritty/alacritty-theme" "$HOME/.config/alacritty/themes"
   fi
+
+  echo "  Make sure you have Hack Nerd Font installed:"
+  echo "    brew install --cask font-hack-nerd-font"
+  echo "    or download and install manually from https://www.nerdfonts.com/font-downloads"
 else
-  echo "Go to https://alacritty.org/#Installation to install alacritty"
+  echo "  Go to https://alacritty.org/#Installation to install alacritty"
 fi
+
+echo
 
 if [ -d "$HOME/.config/zellij" ]; then
-  symlink "zellij/config.kdl" "$HOME/.config/zellij/config.kdl"
+  echo "Configuring zellij..."
+
+  symlink "$WORKDIR/zellij/config.kdl" "$HOME/.config/zellij/config.kdl"
 else
-  echo "Go to https://zellij.dev/documentation/installation.html#binary-download to install zellij"
+  echo "  Make sure you have zellij installed:"
+  echo "    brew install zellij"
+  echo "    or download and install manually from https://zellij.dev/documentation/installation.html"
 fi
 
-if [ -d "$HOME/.config/nvim" ]; then
-  symlink "nvim" "$HOME/.config/nvim"
+echo
 
-  echo "You might want to delete ~/.local/share/nvim, ~/.local/state/nvim, and ~/.cache/nvim"
+if [ -d "$HOME/.config/nvim" ]; then
+  echo "Configuring neovim..."
+
+  symlink "$WORKDIR/nvim" "$HOME/.config/nvim"
+
+  echo "  You might want to delete ~/.local/share/nvim, ~/.local/state/nvim, and ~/.cache/nvim"
+  echo "    mv ~/.local/share/nvim{,.bak}"
+  echo "    mv ~/.local/state/nvim{,.bak}"
+  echo "    mv ~/.cache/nvim{,.bak}"
 else
-  echo "Go to https://neovim.io/doc/install/ to install neovim"
+  echo "  Make sure you have neovim installed:"
+  echo "    brew install neovim"
+  echo "    or download and install manually from https://neovim.io/doc/install/ to install neovim"
 fi
