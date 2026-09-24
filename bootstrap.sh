@@ -47,6 +47,10 @@ git_clone() {
 }
 
 if [ "$IS_OSX" ]; then
+  defaults write com.apple.dock autohide -bool true
+  defaults write com.apple.dock mru-spaces -bool false
+  killall Dock
+
   which -s brew || install_homebrew
 
   echo "Updating your system..."
