@@ -5,6 +5,14 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 WORKDIR=$(pwd)
 
+[ -f /etc/issue ] && grep -q Ubuntu /etc/issue && IS_UBUNTU=true
+uname | grep -q "Darwin" && IS_OSX=true
+
+install_homebrew() {
+  echo "  Installing hombebrew"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+}
+
 backup() {
   [ -L "$1.bak" ] && rm "$1.bak"
   [ -L "$1" ] && mv "$1"{,.bak}
@@ -34,6 +42,22 @@ git_clone() {
   echo "  Git cloning $1 into $2"
   git clone "$1" "$2"
 }
+
+if [ "$IS_OSX" = "true" ]; then
+  which -s brew || install_homebrew
+
+  brew update
+  brew upgrade
+
+  brew install git
+fi
+
+if [ "$IS_UBUNTU" = "true" ]; then
+  sudo apt-get update
+  sudo apt-get upgrade
+
+  which -s git || sudo apt-get install git
+fi
 
 if [ -f "$HOME/.zshrc" ]; then
   echo "Configuring zsh..."
