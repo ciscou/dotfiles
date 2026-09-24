@@ -8,7 +8,7 @@ startup_mode = "SimpleFullscreen"
 padding = { x = 9, y = 9 }
 
 [terminal]
-shell = "/usr/local/bin/zellij"
+shell = { program = "/bin/zsh", args = ["-l", "-c", "zellij attach --index 0 --create"] }
 
 [font]
 normal = { family = "Hack Nerd Font Mono", style = "Regular" }
