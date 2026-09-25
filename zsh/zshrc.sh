@@ -17,11 +17,11 @@ alias gpf="git push --force-with-lease"
 PS1="%# "
 
 zellij_pane_name_update() {
-  local current_dir=$(echo $PWD | sed -e "s@^$HOME@~@")
-  command nohup zellij action rename-pane $current_dir >/dev/null 2>&1
+  if [[ -n $ZELLIJ ]]; then
+    local current_dir="$(echo $PWD | sed -e "s@^$HOME@~@")"
+    command nohup zellij action rename-pane $current_dir >/dev/null 2>&1
+  fi
 }
 
-if [[ -n $ZELLIJ ]]; then
-  zellij_pane_name_update
-  chpwd_functions+=(zellij_pane_name_update)
-fi
+zellij_pane_name_update
+add-zsh-hook chpwd zellij_pane_name_update
