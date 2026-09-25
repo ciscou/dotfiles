@@ -29,7 +29,7 @@ backup() {
   true
 }
 
-assert_line() {
+ensure_line() {
   grep -q "$1" "$2" || append_line "$1" "$2"
 }
 
@@ -67,6 +67,8 @@ if [ "$IS_OSX" ]; then
   for package in git thefuck; do
     which -s $package || brew install $package
   done
+
+  echo
 fi
 
 if [ "$IS_DEBIAN" ]; then
@@ -79,14 +81,16 @@ if [ "$IS_DEBIAN" ]; then
   for package in git thefuck; do
     which -s $package || sudo apt-get install $package
   done
+
+  echo
 fi
 
 if [ -f "$HOME/.zshrc" ]; then
   echo "Configuring zsh..."
 
-  assert_line "source $WORKDIR/zsh/zshrc.sh" "$HOME/.zshrc"
+  ensure_line "source $WORKDIR/zsh/zshrc.sh" "$HOME/.zshrc"
 else
-  echo "Skipping zsh"
+  echo "Skipping zsh (no ~/.zshrc file)"
 fi
 
 echo
@@ -94,21 +98,27 @@ echo
 if [ -f "$HOME/.bashrc" ]; then
   echo "Configuring bash..."
 
-  assert_line "source $WORKDIR/bash/bashrc.sh" "$HOME/.bashrc"
+  ensure_line "source $WORKDIR/bash/bashrc.sh" "$HOME/.bashrc"
 else
-  echo "Skipping bash"
+  echo "Skipping bash (no ~/.bashrc file)"
 fi
 
 echo
 
-echo "Configuring mise..."
-which -s mise || install_mise
-mkdir -p ~/.config/mise
-symlink "$WORKDIR/mise/config.toml" "$HOME/.config/mise/config.toml"
+if [ -L "$HOME/.config/mise/config.toml" ]; then
+  echo "Skipping mise (already symlinked)"
+else
+  echo "Configuring mise..."
+  which -s mise || install_mise
+  mkdir -p ~/.config/mise
+  symlink "$WORKDIR/mise/config.toml" "$HOME/.config/mise/config.toml"
+fi
 
 echo
 
-if [ -d "$HOME/.config/alacritty" ]; then
+if [ -L "$HOME/.config/alacritty/alacritty.toml" ]; then
+  echo "Skipping alacritty (already symlinked)"
+elif [ -d "$HOME/.config/alacritty" ]; then
   echo "Configuring alacritty..."
 
   symlink "$WORKDIR/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
@@ -134,7 +144,9 @@ fi
 
 echo
 
-if [ -d "$HOME/.config/zellij" ]; then
+if [ -L "$HOME/.config/zellij/config.kdl" ]; then
+  echo "Skipping zellij (already symlinked)"
+elif [ -d "$HOME/.config/zellij" ]; then
   echo "Configuring zellij..."
 
   symlink "$WORKDIR/zellij/config.kdl" "$HOME/.config/zellij/config.kdl"
@@ -149,7 +161,9 @@ fi
 
 echo
 
-if [ -d "$HOME/.config/nvim" ]; then
+if [ -L "$HOME/.config/nvim" ]; then
+  echo "Skipping neovim (already symlinked)"
+elif [ -d "$HOME/.config/nvim" ]; then
   echo "Configuring neovim..."
 
   symlink "$WORKDIR/nvim" "$HOME/.config/nvim"
