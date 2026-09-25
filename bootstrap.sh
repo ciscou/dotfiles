@@ -81,8 +81,6 @@ if [ "$IS_DEBIAN" ]; then
   for package in git thefuck; do
     which -s $package || sudo apt-get -qq install $package
   done
-
-  echo
 fi
 
 if [ -f "$HOME/.zshrc" ]; then
