@@ -75,11 +75,11 @@ if [ "$IS_DEBIAN" ]; then
   echo "Updating your system..."
   echo
 
-  sudo apt-get update
-  sudo apt-get upgrade
+  sudo apt-get -qq update
+  sudo apt-get -qq upgrade
 
   for package in git thefuck; do
-    which -s $package || sudo apt-get install $package
+    which -s $package || sudo apt-get -qq install $package
   done
 
   echo
