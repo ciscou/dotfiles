@@ -5,7 +5,7 @@ import = [
 
 [window]
 startup_mode = "SimpleFullscreen"
-padding = { x = 9, y = 9 }
+padding = { x = 9, y = 24 }
 
 [font]
 normal = { family = "Hack Nerd Font Mono", style = "Regular" }
