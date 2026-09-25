@@ -1,3 +1,7 @@
+if type zellij &>/dev/null; then
+  eval "$(zellij setup --generate-auto-start zsh)"
+fi
+
 eval "$($HOME/.local/bin/mise activate zsh)"
 
 alias n=nvim
