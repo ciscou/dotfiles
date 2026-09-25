@@ -105,7 +105,7 @@ echo
 
 if [ -L "$HOME/.config/mise/config.toml" ]; then
   echo "Skipping mise (already symlinked)"
-else
+else # TODO: make mise optional?
   echo "Configuring mise..."
   which -s mise || install_mise
   mkdir -p ~/.config/mise

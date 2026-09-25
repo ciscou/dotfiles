@@ -12,3 +12,5 @@ alias gc="git commit"
 alias gcm="git commit -m"
 alias gp="git push"
 alias gpf="git push --force-with-lease"
+
+# TODO: configure zellij if installed?
