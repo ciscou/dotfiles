@@ -12,7 +12,7 @@ IS_OSX=
 uname | grep -q "Darwin" && IS_OSX=1
 
 install_homebrew() {
-  echo "Installing hombebrew..."
+  echo "Installing homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 
