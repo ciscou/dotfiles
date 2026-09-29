@@ -1,6 +1,5 @@
 {
   "extras": [
-    "lazyvim.plugins.extras.lang.ruby",
     "lazyvim.plugins.extras.lang.tailwind",
     "lazyvim.plugins.extras.lang.terraform",
     "lazyvim.plugins.extras.linting.eslint"
