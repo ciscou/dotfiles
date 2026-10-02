@@ -14,7 +14,7 @@ alias gcm="git commit -m"
 alias gp="git push"
 alias gpf="git push --force-with-lease"
 
-PS1="%# "
+PS1='%F{green}❯%f '
 
 zellij_pane_name_update() {
   if [[ -n $ZELLIJ ]]; then
@@ -23,5 +23,15 @@ zellij_pane_name_update() {
   fi
 }
 
+SHOULD_ECHO=
+maybe_echo() {
+  if [[ -n $SHOULD_ECHO ]]; then
+    echo
+  else
+    SHOULD_ECHO=true
+  fi
+}
+
 zellij_pane_name_update
 add-zsh-hook chpwd zellij_pane_name_update
+add-zsh-hook precmd maybe_echo
