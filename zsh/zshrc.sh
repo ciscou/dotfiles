@@ -36,7 +36,7 @@ typeset -A TAB_NAME_BY_COMMAND
 TAB_NAME_BY_COMMAND=(
   [n]=nvim
   [nvim]=nvim
-  ["bin/rails"]=rails
+  ["bin/rails"]=bin/rails
   ["bin/dev"]=bin/dev
 )
 zellij_tab_name_update() {
