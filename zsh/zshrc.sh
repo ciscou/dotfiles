@@ -36,6 +36,8 @@ typeset -A TAB_NAME_BY_COMMAND
 TAB_NAME_BY_COMMAND=(
   [n]=nvim
   [nvim]=nvim
+  ["bin/ci"]=bin/ci
+  ["bin/rspec"]=bin/rspec
   ["bin/rails"]=bin/rails
   ["bin/dev"]=bin/dev
 )
