@@ -37,6 +37,7 @@ TAB_NAME_BY_COMMAND=(
   [n]=nvim
   [nvim]=nvim
   ["bin/rails"]=rails
+  ["bin/dev"]=bin/dev
 )
 zellij_tab_name_update() {
   local cmd=$2
