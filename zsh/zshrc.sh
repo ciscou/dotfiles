@@ -34,6 +34,7 @@ TAB_NAME_BY_COMMAND=(
   [n]=nvim
   [nvim]=nvim
   [kamal]=kamal
+  [ssh]=ssh
   ["bin/ci"]=bin/ci
   ["bin/rspec"]=bin/rspec
   ["bin/rails"]=bin/rails
