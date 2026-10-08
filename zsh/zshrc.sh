@@ -32,6 +32,27 @@ maybe_echo() {
   fi
 }
 
+typeset -A TAB_NAME_BY_COMMAND
+TAB_NAME_BY_COMMAND=(
+  [n]=nvim
+  [nvim]=nvim
+  ["bin/rails"]=rails
+)
+zellij_tab_name_update() {
+  local cmd=$2
+  local new_tab_name=$TAB_NAME_BY_COMMAND[${cmd%% *}]
+
+  if [[ -n $new_tab_name ]]; then
+    command nohup zellij action rename-tab $new_tab_name >/dev/null 2>&1
+  fi
+}
+
+zellij_undo_tab_name_update() {
+  command nohup zellij action undo-rename-tab >/dev/null 2>&1
+}
+
 zellij_pane_name_update
 add-zsh-hook chpwd zellij_pane_name_update
 add-zsh-hook precmd maybe_echo
+add-zsh-hook preexec zellij_tab_name_update
+add-zsh-hook precmd zellij_undo_tab_name_update
