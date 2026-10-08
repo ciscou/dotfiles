@@ -3,6 +3,7 @@ return {
   opts = {
     ensure_installed = {
       "bash",
+      "zsh",
       "html",
       "javascript",
       "json",

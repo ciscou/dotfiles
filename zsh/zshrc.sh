@@ -23,45 +23,45 @@ add_new_line_to_ps1() {
 }
 
 zellij_pane_name_update() {
-  [[ -z $ZELLIJ ]] && return
-
   local current_dir="${PWD/#$HOME/~}"
-  command nohup zellij action rename-pane $current_dir >/dev/null 2>&1
+  zellij action rename-pane $current_dir >/dev/null 2>&1
 }
 
-typeset -A TAB_NAME_BY_COMMAND
-TAB_NAME_BY_COMMAND=(
-  [n]=nvim
-  [nvim]=nvim
-  [kamal]=kamal
-  [ssh]=ssh
-  ["bin/ci"]=bin/ci
-  ["bin/rspec"]=bin/rspec
-  ["bin/rails"]=bin/rails
-  ["bin/dev"]=bin/dev
-)
-LAST_RENAMED_TAB_ID=
+_zellij_ssh_tab_name() {
+  if (($# == 1)); then
+    print -r -- "ssh ${${1#*@}%.local}"
+  else
+    print -r -- ssh
+  fi
+}
+
+_zellij_rename_current_tab() {
+  local info=$(zellij action current-tab-info 2>/dev/null)
+  if [[ $info =~ "id: ([0-9]+)" ]]; then
+    LAST_RENAMED_TAB_ID=$match[1]
+    zellij action rename-tab -t $LAST_RENAMED_TAB_ID $1 >/dev/null 2>&1
+  fi
+}
+
 zellij_tab_name_update() {
-  [[ -z $ZELLIJ ]] && return
+  local words=(${=2})
+  local cmd=$words[1]
+  local name
 
-  local cmd=$2
-  local new_tab_name=$TAB_NAME_BY_COMMAND[${cmd%% *}]
+  case $cmd in
+  nvim | kamal | bin/ci | bin/rspec | bin/rails | bin/dev) name=$cmd ;;
+  ssh) name=$(_zellij_ssh_tab_name ${words[2,-1]}) ;;
+  esac
 
-  LAST_RENAMED_TAB_ID=
-  if [[ -n $new_tab_name ]]; then
-    local info=$(zellij action current-tab-info 2>/dev/null)
-    if [[ $info =~ "id: ([0-9]+)" ]]; then
-      LAST_RENAMED_TAB_ID=$match[1]
-      command nohup zellij action rename-tab -t $LAST_RENAMED_TAB_ID $new_tab_name >/dev/null 2>&1
-    fi
+  LAST_RENAMED_TAB_ID=""
+  if [[ -n $name ]]; then
+    _zellij_rename_current_tab $name
   fi
 }
 
 zellij_undo_tab_name_update() {
-  [[ -z $ZELLIJ ]] && return
   [[ -z $LAST_RENAMED_TAB_ID ]] && return
-
-  command nohup zellij action rename-tab -t $LAST_RENAMED_TAB_ID zsh >/dev/null 2>&1
+  zellij action rename-tab -t $LAST_RENAMED_TAB_ID zsh >/dev/null 2>&1
 }
 
 if [[ -n $ZELLIJ ]]; then
@@ -73,3 +73,5 @@ if [[ -n $ZELLIJ ]]; then
   add-zsh-hook precmd zellij_undo_tab_name_update
   add-zsh-hook precmd add_new_line_to_ps1
 fi
+
+# vim: ft=zsh
