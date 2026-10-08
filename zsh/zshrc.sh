@@ -29,7 +29,7 @@ zellij_pane_name_update() {
 
 _zellij_ssh_tab_name() {
   if (($# == 1)); then
-    print -r -- "ssh ${${1#*@}%.local}"
+    print -r -- $'\ueb3a'" ${${1#*@}%.local}"
   else
     print -r -- ssh
   fi
@@ -49,8 +49,10 @@ zellij_tab_name_update() {
   local name
 
   case $cmd in
-  nvim | kamal | bin/ci | bin/rspec | bin/rails | bin/dev) name=$cmd ;;
+  kamal | bin/ci | bin/rspec | bin/dev) name=$cmd ;;
   ssh) name=$(_zellij_ssh_tab_name ${words[2,-1]}) ;;
+  nvim) name=$'\ue6ae nvim' ;;
+  bin/rails) name=$'\ue73b'" rails $words[2]" ;;
   esac
 
   LAST_RENAMED_TAB_ID=""
