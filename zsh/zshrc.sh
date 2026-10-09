@@ -22,6 +22,10 @@ ZELLIJ_ICON=(
   [zsh]=$'\uf4b5'
   [ssh]=$'\ueb3a'
   [rails]=$'\ue73b'
+  [kamal_shell]=$'\ueb3a'
+  [kamal_console]=$'\ueb3a'
+  [kamal_dbc]=$'\ue706'
+  [kamal_deploy]=$'\uf0ee'
   [nvim]=$'\ue6ae'
   [claude]=$'\uee0d'
   # TODO: [claude]=$'\uec82'
@@ -53,6 +57,20 @@ _zellij_bundle_tab_name() {
   fi
 }
 
+_zellij_kamal_tab_name() {
+  if (($# == 1)) && [[ $1 == "deploy" ]]; then
+    print -r -- "$ZELLIJ_ICON[kamal_deploy] kamal deploy"
+  elif (($# == 1)) && [[ $1 == "shell" ]]; then
+    print -r -- "$ZELLIJ_ICON[kamal_shell] kamal shell"
+  elif (($# == 1)) && [[ $1 == "console" ]]; then
+    print -r -- "$ZELLIJ_ICON[kamal_console] kamal console"
+  elif (($# == 1)) && [[ $1 == "dbc" ]]; then
+    print -r -- "$ZELLIJ_ICON[kamal_dbc] kamal dbc"
+  else
+    print -r -- "kamal"
+  fi
+}
+
 _zellij_bin_rails_tab_name() {
   if (($# == 1)); then
     print -r -- "$ZELLIJ_ICON[rails] rails $1"
@@ -80,6 +98,7 @@ zellij_tab_name_update() {
   ssh) name=$(_zellij_ssh_tab_name ${words[2,-1]}) ;;
   nvim) name="$ZELLIJ_ICON[nvim] nvim" ;;
   bundle) name=$(_zellij_bundle_tab_name ${words[2,-1]}) ;;
+  kamal) name=$(_zellij_kamal_tab_name ${words[2,-1]}) ;;
   claude) name="$ZELLIJ_ICON[claude] claude" ;;
   bin/rails) name=$(_zellij_bin_rails_tab_name ${words[2,-1]}) ;;
   bin/ci | bin/dev | bin/rspec) name="$ZELLIJ_ICON[rails] $cmd" ;;
