@@ -31,7 +31,15 @@ _zellij_ssh_tab_name() {
   if (($# == 1)); then
     print -r -- $'\ueb3a'" ${${1#*@}%.local}"
   else
-    print -r -- ssh
+    print -r -- $'\ueb3a'" ssh"
+  fi
+}
+
+_zellij_bundle_tab_name() {
+  if (($# > 1)) && [[ $1 == "exec" ]]; then
+    print -r -- $'\ue73b'" $2"
+  else
+    print -r -- $'\ue73b'" bundle"
   fi
 }
 
@@ -49,10 +57,13 @@ zellij_tab_name_update() {
   local name
 
   case $cmd in
-  kamal | bin/ci | bin/rspec | bin/dev) name=$cmd ;;
   ssh) name=$(_zellij_ssh_tab_name ${words[2,-1]}) ;;
   nvim) name=$'\ue6ae nvim' ;;
+  bundle) name=$(_zellij_bundle_tab_name ${words[2,-1]}) ;;
+  bin/ci) name=$'\ue73b'" bin/ci" ;;
+  bin/dev) name=$'\ue73b'" bin/dev" ;;
   bin/rails) name=$'\ue73b'" rails $words[2]" ;;
+  *) name=$cmd ;;
   esac
 
   LAST_RENAMED_TAB_ID=""
@@ -63,12 +74,12 @@ zellij_tab_name_update() {
 
 zellij_undo_tab_name_update() {
   [[ -z $LAST_RENAMED_TAB_ID ]] && return
-  zellij action rename-tab -t $LAST_RENAMED_TAB_ID zsh >/dev/null 2>&1
+  zellij action rename-tab -t $LAST_RENAMED_TAB_ID $'\uf4b5 zsh' >/dev/null 2>&1
 }
 
 if [[ -n $ZELLIJ ]]; then
   zellij_pane_name_update
-  zellij action rename-tab zsh
+  zellij action rename-tab $'\uf4b5 zsh'
 
   add-zsh-hook chpwd zellij_pane_name_update
   add-zsh-hook preexec zellij_tab_name_update
