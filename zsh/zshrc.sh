@@ -17,6 +17,16 @@ alias gpf="git push --force-with-lease"
 ORIGINAL_PS1="%F{green}❯%f "
 PS1_PREFIX=""
 
+typeset -A ZELLIJ_ICON
+ZELLIJ_ICON=(
+  [zsh]=$'\uf4b5'
+  [ssh]=$'\ueb3a'
+  [rails]=$'\ue73b'
+  [nvim]=$'\ue6ae'
+  [claude]=$'\uee0d'
+  # TODO: [claude]=$'\uec82'
+)
+
 add_new_line_to_ps1() {
   PS1="$PS1_PREFIX$ORIGINAL_PS1"
   PS1_PREFIX=$'\n'
@@ -29,26 +39,36 @@ zellij_pane_name_update() {
 
 _zellij_ssh_tab_name() {
   if (($# == 1)); then
-    print -r -- $'\ueb3a'" ${${1#*@}%.local}"
+    print -r -- "$ZELLIJ_ICON[ssh] ${${1#*@}%.local}"
   else
-    print -r -- $'\ueb3a'" ssh"
+    print -r -- "$ZELLIJ_ICON[ssh] ssh"
   fi
 }
 
 _zellij_bundle_tab_name() {
   if (($# > 1)) && [[ $1 == "exec" ]]; then
-    print -r -- $'\ue73b'" $2"
+    print -r -- "$ZELLIJ_ICON[rails] $2"
   else
-    print -r -- $'\ue73b'" bundle"
+    print -r -- "$ZELLIJ_ICON[rails] bundle"
   fi
 }
 
-_zellij_rename_current_tab() {
-  local info=$(zellij action current-tab-info 2>/dev/null)
-  if [[ $info =~ "id: ([0-9]+)" ]]; then
-    LAST_RENAMED_TAB_ID=$match[1]
-    zellij action rename-tab -t $LAST_RENAMED_TAB_ID $1 >/dev/null 2>&1
+_zellij_bin_rails_tab_name() {
+  if (($# == 1)); then
+    print -r -- "$ZELLIJ_ICON[rails] rails $1"
+  else
+    print -r -- "$ZELLIJ_ICON[rails] rails"
   fi
+}
+
+_zellij_fetch_tab_id() {
+  [[ -z $ZELLIJ_TAB_ID ]] && [[ $(zellij action current-tab-info 2>/dev/null) =~ "id: ([0-9]+)" ]] && ZELLIJ_TAB_ID=$match[1]
+}
+
+_zellij_rename_current_tab() {
+  _zellij_fetch_tab_id
+  [[ -z $ZELLIJ_TAB_ID ]] && return
+  zellij action rename-tab -t $ZELLIJ_TAB_ID $1 >/dev/null 2>&1
 }
 
 zellij_tab_name_update() {
@@ -58,28 +78,30 @@ zellij_tab_name_update() {
 
   case $cmd in
   ssh) name=$(_zellij_ssh_tab_name ${words[2,-1]}) ;;
-  nvim) name=$'\ue6ae nvim' ;;
+  nvim) name="$ZELLIJ_ICON[nvim] nvim" ;;
   bundle) name=$(_zellij_bundle_tab_name ${words[2,-1]}) ;;
-  bin/ci) name=$'\ue73b'" bin/ci" ;;
-  bin/dev) name=$'\ue73b'" bin/dev" ;;
-  bin/rails) name=$'\ue73b'" rails $words[2]" ;;
-  *) name=$cmd ;;
+  claude) name="$ZELLIJ_ICON[claude] claude" ;;
+  bin/rails) name=$(_zellij_bin_rails_tab_name ${words[2,-1]}) ;;
+  bin/ci | bin/dev | bin/rspec) name="$ZELLIJ_ICON[rails] $cmd" ;;
   esac
 
-  LAST_RENAMED_TAB_ID=""
   if [[ -n $name ]]; then
+    SHOULD_UNDO_TAB_NAME_UPDATE=1
     _zellij_rename_current_tab $name
   fi
 }
 
 zellij_undo_tab_name_update() {
-  [[ -z $LAST_RENAMED_TAB_ID ]] && return
-  zellij action rename-tab -t $LAST_RENAMED_TAB_ID $'\uf4b5 zsh' >/dev/null 2>&1
+  [[ -z $SHOULD_UNDO_TAB_NAME_UPDATE ]] && return
+  _zellij_fetch_tab_id
+  [[ -z $ZELLIJ_TAB_ID ]] && return
+  SHOULD_UNDO_TAB_NAME_UPDATE=""
+  zellij action rename-tab -t $ZELLIJ_TAB_ID "$ZELLIJ_ICON[zsh] zsh" >/dev/null 2>&1
 }
 
 if [[ -n $ZELLIJ ]]; then
   zellij_pane_name_update
-  zellij action rename-tab $'\uf4b5 zsh'
+  zellij action rename-tab "$ZELLIJ_ICON[zsh] zsh"
 
   add-zsh-hook chpwd zellij_pane_name_update
   add-zsh-hook preexec zellij_tab_name_update
