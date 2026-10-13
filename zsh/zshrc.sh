@@ -28,6 +28,7 @@ ZELLIJ_ICON=(
   [kamal_deploy]=$'\uf0ee'
   [nvim]=$'\ue6ae'
   [claude]=$'\uec82'
+  [docker]=$'\ue7b0'
 )
 
 add_new_line_to_ps1() {
@@ -70,6 +71,14 @@ _zellij_kamal_tab_name() {
   fi
 }
 
+_zellij_mise_tab_name() {
+  if (($# == 2)) && [[ $1 == "run" ]]; then
+    print -r -- "$ZELLIJ_ICON[docker] mr $2"
+  else
+    print -r -- "$ZELLIJ_ICON[docker] mise"
+  fi
+}
+
 _zellij_bin_rails_tab_name() {
   if (($# == 1)); then
     print -r -- "$ZELLIJ_ICON[rails] rails $1"
@@ -99,6 +108,7 @@ zellij_tab_name_update() {
   bundle) name=$(_zellij_bundle_tab_name ${words[2,-1]}) ;;
   kamal) name=$(_zellij_kamal_tab_name ${words[2,-1]}) ;;
   claude) name="$ZELLIJ_ICON[claude] claude" ;;
+  mise) name=$(_zellij_mise_tab_name ${words[2,-1]}) ;;
   bin/rails) name=$(_zellij_bin_rails_tab_name ${words[2,-1]}) ;;
   bin/ci | bin/dev | bin/rspec) name="$ZELLIJ_ICON[rails] $cmd" ;;
   esac
