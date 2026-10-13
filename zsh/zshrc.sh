@@ -88,6 +88,14 @@ _zellij_bin_rails_tab_name() {
   fi
 }
 
+_zellij_bin_docker_rails_tab_name() {
+  if (($# == 1)); then
+    print -r -- "$ZELLIJ_ICON[rails] rails $1"
+  else
+    print -r -- "$ZELLIJ_ICON[rails] rails"
+  fi
+}
+
 _zellij_fetch_tab_id() {
   [[ -z $ZELLIJ_TAB_ID ]] && [[ $(zellij action current-tab-info 2>/dev/null) =~ "id: ([0-9]+)" ]] && ZELLIJ_TAB_ID=$match[1]
 }
@@ -110,6 +118,7 @@ zellij_tab_name_update() {
   kamal) name=$(_zellij_kamal_tab_name ${words[2,-1]}) ;;
   claude) name="$ZELLIJ_ICON[claude] claude" ;;
   mise) name=$(_zellij_mise_tab_name ${words[2,-1]}) ;;
+  bin/docker-rails) name=$(_zellij_bin_docker_rails_tab_name ${words[2,-1]}) ;;
   bin/rails) name=$(_zellij_bin_rails_tab_name ${words[2,-1]}) ;;
   bin/ci | bin/dev | bin/rspec) name="$ZELLIJ_ICON[rails] $cmd" ;;
   esac
