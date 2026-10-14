@@ -118,7 +118,7 @@ zellij_undo_tab_name_update() {
   zellij action rename-tab -t $ZELLIJ_TAB_ID "$ZELLIJ_ICON[zsh] zsh" >/dev/null 2>&1
 }
 
-if [[ -n $ZELLIJ ]]; then
+if [[ -n $ZELLIJ && -o interactive ]]; then
   zellij_pane_name_update
   zellij action rename-tab "$ZELLIJ_ICON[zsh] zsh"
 
