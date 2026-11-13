@@ -27,8 +27,7 @@ ZELLIJ_ICON=(
   [kamal_dbc]=$'\ue706'
   [kamal_deploy]=$'\uf0ee'
   [nvim]=$'\ue6ae'
-  [claude]=$'\uee0d'
-  # TODO: [claude]=$'\uec82'
+  [claude]=$'\uec82'
 )
 
 add_new_line_to_ps1() {
