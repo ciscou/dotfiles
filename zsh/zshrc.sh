@@ -1,4 +1,4 @@
-if type zellij &>/dev/null; then
+if [[ -t 0 && -t 1 ]] && type zellij &>/dev/null; then
   export ZELLIJ_AUTO_EXIT=true
   eval "$(zellij setup --generate-auto-start zsh)"
 fi

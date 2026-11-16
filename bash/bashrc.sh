@@ -1,4 +1,5 @@
-if type zellij &>/dev/null; then
+# Only auto-start in a real terminal (see zsh/zshrc.sh).
+if [[ -t 0 && -t 1 ]] && type zellij &>/dev/null; then
   export ZELLIJ_AUTO_EXIT=true
   eval "$(zellij setup --generate-auto-start bash)"
 fi
